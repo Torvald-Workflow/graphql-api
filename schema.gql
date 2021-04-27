@@ -1,0 +1,21 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type AuthenticatedUser {
+  token: String!
+  user: String!
+}
+
+input CreditentialInput {
+  password: String!
+  username: String!
+}
+
+type Mutation {
+  login(creditentials: CreditentialInput!): AuthenticatedUser!
+}
+
+type Query {
+  helloWorld: String!
+}
