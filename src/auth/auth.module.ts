@@ -5,10 +5,10 @@ import { UsersModule } from 'src/users/users.module';
 import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
 import { jwtConstants } from './constants';
-import { LocalStrategy } from './local.strategy';
+import { JwtStrategy } from './jwt.strategy';
 
 @Module({
-  providers: [AuthService, LocalStrategy, AuthResolver],
+  providers: [AuthService, AuthResolver, JwtStrategy],
   imports: [
     UsersModule,
     PassportModule,

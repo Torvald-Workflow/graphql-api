@@ -10,6 +10,7 @@ import { UsersModule } from './users/users.module';
     GraphQLModule.forRoot({
       autoSchemaFile: 'schema.gql',
       sortSchema: true,
+      context: ({ req }) => ({ req }),
     }),
   ],
 })
