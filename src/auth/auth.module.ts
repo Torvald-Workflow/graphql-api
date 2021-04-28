@@ -17,5 +17,6 @@ import { JwtStrategy } from './jwt.strategy';
       signOptions: { expiresIn: '60s' },
     }),
   ],
+  exports: [AuthService],
 })
 export class AuthModule {}

@@ -1,9 +1,10 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { User } from 'src/users/user.model';
 
 @ObjectType()
 export class AuthenticatedUser {
   @Field()
-  user: string;
+  user: User;
 
   @Field()
   token: string;

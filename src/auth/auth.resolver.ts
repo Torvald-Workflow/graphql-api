@@ -1,3 +1,4 @@
+import { UnauthorizedException } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { AuthenticatedUser } from './dto/authenticatedUser.output';
@@ -12,12 +13,14 @@ export class AuthResolver {
     @Args('creditentials') creditentials: CreditentialInput,
   ): Promise<AuthenticatedUser> {
     const user = await this.authService.validateUser(
-      creditentials.username,
+      creditentials.email,
       creditentials.password,
     );
 
+    if (!user) throw new UnauthorizedException();
+
     const token = await this.authService.login(user);
 
-    return { ...user, token: token.access_token };
+    return { user, token: token.access_token };
   }
 }

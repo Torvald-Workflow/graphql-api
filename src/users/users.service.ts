@@ -1,18 +1,31 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import * as bcrypt from 'bcrypt';
+import { Repository } from 'typeorm';
+import { CreateUserDto } from './dto/createUser.dto';
+import { User } from './user.entity';
 
-export type User = any;
+const BCRYPT_SALT = 10;
 
 @Injectable()
 export class UsersService {
-  private readonly users = [
-    {
-      userId: 1,
-      username: 'admin',
-      password: 'admin',
-    },
-  ];
+  constructor(
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
+  ) {}
 
-  async findOne(username: string): Promise<User | undefined> {
-    return this.users.find((user) => user.username === username);
+  async findOne(email: string): Promise<User> {
+    return this.usersRepository.findOne({ email });
+  }
+
+  async create(data: CreateUserDto): Promise<User> {
+    const user = new User();
+
+    user.email = data.email;
+    user.firstName = data.firstName;
+    user.lastName = data.lastName;
+    user.password = await bcrypt.hash(data.password, BCRYPT_SALT);
+
+    return this.usersRepository.save(user);
   }
 }

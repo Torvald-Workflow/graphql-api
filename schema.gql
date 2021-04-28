@@ -4,18 +4,33 @@
 
 type AuthenticatedUser {
   token: String!
-  user: String!
+  user: User!
+}
+
+input CreateUserDto {
+  email: String!
+  firstName: String!
+  lastName: String!
+  password: String!
 }
 
 input CreditentialInput {
+  email: String!
   password: String!
-  username: String!
 }
 
 type Mutation {
+  createUser(user: CreateUserDto!): User!
   login(creditentials: CreditentialInput!): AuthenticatedUser!
 }
 
 type Query {
   helloWorld: String!
+}
+
+type User {
+  email: String!
+  firstName: String!
+  id: String!
+  lastName: String!
 }
