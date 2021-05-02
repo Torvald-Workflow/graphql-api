@@ -20,6 +20,7 @@ input CreditentialInput {
 }
 
 type Mutation {
+  createDefaultAdminUser(user: CreateUserDto!): User!
   createUser(user: CreateUserDto!): User!
   login(creditentials: CreditentialInput!): AuthenticatedUser!
 }

@@ -25,6 +25,20 @@ export class UsersService {
     user.firstName = data.firstName;
     user.lastName = data.lastName;
     user.password = await bcrypt.hash(data.password, BCRYPT_SALT);
+    user.createdAt = new Date();
+
+    return this.usersRepository.save(user);
+  }
+
+  async createDefaultAdminUser(data: CreateUserDto): Promise<User> {
+    const user = new User();
+
+    user.email = data.email;
+    user.firstName = data.firstName;
+    user.lastName = data.lastName;
+    user.password = await bcrypt.hash(data.password, BCRYPT_SALT);
+    user.isAdmin = true;
+    user.createdAt = new Date();
 
     return this.usersRepository.save(user);
   }
