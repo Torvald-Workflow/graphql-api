@@ -1,0 +1,24 @@
+name: Run jest tests
+on: [push]
+jobs:
+  Jest tests:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+      - run yarn
+      - run yarn test
+
+  Jest coverage:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+      - run yarn
+      - run yarn test:cov
