@@ -1,7 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { getConnection } from 'typeorm';
 import { TypeOrmConfigService } from '../config.service';
-import { ConfigurationService } from '../configuration/configuration.service';
+import { ConfigurationModule } from '../configuration/configuration.module';
 import { User } from './user.entity';
 import { UsersResolver } from './users.resolver';
 import { UsersService } from './users.service';
@@ -9,9 +10,9 @@ import { UsersService } from './users.service';
 describe('UsersResolver', () => {
   let resolver: UsersResolver;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UsersResolver, UsersService, ConfigurationService],
+      providers: [UsersResolver, UsersService],
       imports: [
         TypeOrmModule.forRootAsync({
           name: 'default',
@@ -19,10 +20,14 @@ describe('UsersResolver', () => {
           useClass: TypeOrmConfigService,
         }),
         TypeOrmModule.forFeature([User]),
+        ConfigurationModule,
       ],
     }).compile();
 
     resolver = module.get<UsersResolver>(UsersResolver);
+
+    await getConnection().dropDatabase();
+    await getConnection().runMigrations();
   });
 
   it('should be defined', () => {

@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { getConnection } from 'typeorm';
 import { TypeOrmConfigService } from '../config.service';
 import { CreateUserDto } from './dto/createUser.dto';
 import { User } from './user.entity';
@@ -22,6 +23,9 @@ describe('UsersService', () => {
     }).compile();
 
     service = module.get<UsersService>(UsersService);
+
+    await getConnection().dropDatabase();
+    await getConnection().runMigrations();
   });
 
   it('should be defined', () => {

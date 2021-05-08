@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ConfigurationService } from '../configuration/configuration.service';
 import { InstallationGuard } from '../configuration/guards/installation.guard';
@@ -13,12 +13,6 @@ export class UsersResolver {
     private readonly usersService: UsersService,
     private readonly configurationService: ConfigurationService,
   ) {}
-
-  @UseGuards(JwtAuthGuard)
-  @Query(() => String)
-  helloWorld(): string {
-    return 'Hello world';
-  }
 
   @UseGuards(JwtAuthGuard)
   @Mutation(() => User)

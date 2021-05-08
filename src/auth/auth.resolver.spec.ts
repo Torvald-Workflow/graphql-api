@@ -11,10 +11,10 @@ import { AuthService } from './auth.service';
 import { jwtConstants } from './constants';
 import { JwtStrategy } from './jwt.strategy';
 
-describe('AuthService', () => {
-  let service: AuthService;
+describe('AuthResolver', () => {
+  let resolver: AuthResolver;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [AuthService, AuthResolver, JwtStrategy],
       imports: [
@@ -33,13 +33,13 @@ describe('AuthService', () => {
       ],
     }).compile();
 
-    service = module.get<AuthService>(AuthService);
+    resolver = module.get<AuthResolver>(AuthResolver);
 
     await getConnection().dropDatabase();
     await getConnection().runMigrations();
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(resolver).toBeDefined();
   });
 });
