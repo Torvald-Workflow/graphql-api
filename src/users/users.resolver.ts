@@ -1,8 +1,8 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { ConfigurationService } from 'src/configuration/configuration.service';
-import { InstallationGuard } from 'src/configuration/guards/installation.guard';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { ConfigurationService } from '../configuration/configuration.service';
+import { InstallationGuard } from '../configuration/guards/installation.guard';
 import { CreateUserDto } from './dto/createUser.dto';
 import { User } from './user.model';
 import { UsersService } from './users.service';
