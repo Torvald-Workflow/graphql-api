@@ -7,6 +7,13 @@ type AuthenticatedUser {
   user: User!
 }
 
+type Configuration {
+  name: String!
+  section: String!
+  type: Float!
+  value: String!
+}
+
 input CreateUserDto {
   email: String!
   firstName: String!
@@ -26,7 +33,7 @@ type Mutation {
 }
 
 type Query {
-  helloWorld: String!
+  fetchConfigurations: [Configuration!]!
 }
 
 type User {

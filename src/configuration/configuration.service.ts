@@ -29,4 +29,8 @@ export class ConfigurationService {
 
     return this.configurationRepository.save(configuration);
   }
+
+  async getConfigurations(): Promise<Configuration[]> {
+    return await this.configurationRepository.find();
+  }
 }
