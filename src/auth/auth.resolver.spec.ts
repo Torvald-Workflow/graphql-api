@@ -4,7 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { getConnection } from 'typeorm';
 import { TypeOrmConfigService } from '../config.service';
-import { User } from '../users/user.entity';
+import { UserEntity } from '../users/user.entity';
 import { UsersModule } from '../users/users.module';
 import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
@@ -29,7 +29,7 @@ describe('AuthResolver', () => {
           imports: [TypeOrmConfigService],
           useClass: TypeOrmConfigService,
         }),
-        TypeOrmModule.forFeature([User]),
+        TypeOrmModule.forFeature([UserEntity]),
       ],
     }).compile();
 

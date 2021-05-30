@@ -3,7 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { getConnection } from 'typeorm';
 import { TypeOrmConfigService } from '../config.service';
 import { CreateUserDto } from './dto/createUser.dto';
-import { User } from './user.entity';
+import { UserEntity } from './user.entity';
 import { UsersService } from './users.service';
 
 describe('UsersService', () => {
@@ -18,7 +18,7 @@ describe('UsersService', () => {
           imports: [TypeOrmConfigService],
           useClass: TypeOrmConfigService,
         }),
-        TypeOrmModule.forFeature([User]),
+        TypeOrmModule.forFeature([UserEntity]),
       ],
     }).compile();
 
@@ -80,7 +80,7 @@ describe('UsersService', () => {
       password,
     };
 
-    const user: User = await service.createDefaultAdminUser(
+    const user: UserEntity = await service.createDefaultAdminUser(
       createUserParameters,
     );
 

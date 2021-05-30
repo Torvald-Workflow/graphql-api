@@ -13,4 +13,19 @@ export class User {
 
   @Field()
   email: string;
+
+  @Field({ nullable: true })
+  birthday: Date;
+
+  @Field()
+  isAdmin: boolean;
+
+  @Field()
+  isActive: boolean;
+
+  @Field({ nullable: true })
+  jobTitle: string;
+
+  @Field()
+  createdAt: Date;
 }

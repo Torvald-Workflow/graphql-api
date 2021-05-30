@@ -1,29 +1,36 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/createUser.dto';
-import { User } from './user.entity';
+import { UserEntity } from './user.entity';
 
 const BCRYPT_SALT = 10;
 
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    @InjectRepository(UserEntity)
+    private usersRepository: Repository<UserEntity>,
   ) {}
 
-  async findAll(): Promise<User[]> {
+  async findAll(): Promise<UserEntity[]> {
     return this.usersRepository.find();
   }
 
-  async findOne(email: string): Promise<User> {
+  async findOne(email: string): Promise<UserEntity> {
     return this.usersRepository.findOne({ email });
   }
 
-  async create(data: CreateUserDto): Promise<User> {
-    const user = new User();
+  async create(data: CreateUserDto): Promise<UserEntity> {
+    const isUserExists = await this.findOne(data.email);
+
+    if (isUserExists)
+      throw new BadRequestException(
+        'A user with this email is already registered',
+      );
+
+    const user = new UserEntity();
 
     user.email = data.email;
     user.firstName = data.firstName;
@@ -34,8 +41,8 @@ export class UsersService {
     return this.usersRepository.save(user);
   }
 
-  async createDefaultAdminUser(data: CreateUserDto): Promise<User> {
-    const user = new User();
+  async createDefaultAdminUser(data: CreateUserDto): Promise<UserEntity> {
+    const user = new UserEntity();
 
     user.email = data.email;
     user.firstName = data.firstName;
