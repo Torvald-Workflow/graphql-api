@@ -5,7 +5,7 @@ module.exports = {
   // "timers": "fake",
   moduleFileExtensions: ['js', 'json', 'ts'],
   rootDir: 'src',
-  testRegex: '.spec.ts$',
+  testRegex: ['.spec.ts$', '.e2e-spec.ts$'],
   transform: {
     '^.+\\.(t|j)s$': 'ts-jest',
   },

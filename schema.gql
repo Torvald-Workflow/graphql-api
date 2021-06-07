@@ -26,6 +26,11 @@ input CreditentialInput {
   password: String!
 }
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type Mutation {
   createDefaultAdminUser(user: CreateUserDto!): User!
   createUser(user: CreateUserDto!): User!
@@ -37,8 +42,13 @@ type Query {
 }
 
 type User {
+  birthday: DateTime
+  createdAt: DateTime!
   email: String!
   firstName: String!
   id: String!
+  isActive: Boolean!
+  isAdmin: Boolean!
+  jobTitle: String
   lastName: String!
 }
