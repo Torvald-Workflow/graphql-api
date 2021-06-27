@@ -4,7 +4,7 @@ import { getConnection } from 'typeorm';
 import { TypeOrmConfigService } from '../config.service';
 import { ConfigurationResolver } from './configuration.resolver';
 import { ConfigurationService } from './configuration.service';
-import { Configuration } from './entity/configuration.entity';
+import { ConfigurationEntity } from './entity/configuration.entity';
 
 describe('ConfigurationResolver', () => {
   let resolver: ConfigurationResolver;
@@ -18,7 +18,7 @@ describe('ConfigurationResolver', () => {
           imports: [TypeOrmConfigService],
           useClass: TypeOrmConfigService,
         }),
-        TypeOrmModule.forFeature([Configuration]),
+        TypeOrmModule.forFeature([ConfigurationEntity]),
       ],
     }).compile();
 
@@ -30,5 +30,22 @@ describe('ConfigurationResolver', () => {
 
   it('should be defined', () => {
     expect(resolver).toBeDefined();
+  });
+
+  it('Should fetch all configuration of the application', async () => {
+    const configuration = await resolver.fetchConfigurations();
+
+    expect(configuration).toHaveLength(1);
+
+    expect(configuration[0] instanceof ConfigurationEntity).toBe(true);
+
+    expect(configuration).toEqual([
+      {
+        section: 'global',
+        name: 'requireInstallation',
+        value: 'true',
+        type: 3,
+      },
+    ]);
   });
 });

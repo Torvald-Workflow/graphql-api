@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Configuration } from './entity/configuration.entity';
+import { ConfigurationEntity } from './entity/configuration.entity';
 
 @Injectable()
 export class ConfigurationService {
   constructor(
-    @InjectRepository(Configuration)
-    private configurationRepository: Repository<Configuration>,
+    @InjectRepository(ConfigurationEntity)
+    private configurationRepository: Repository<ConfigurationEntity>,
   ) {}
 
   async isApplicationRequireInstallation(): Promise<boolean> {
@@ -19,7 +19,7 @@ export class ConfigurationService {
     return requireInstallation.value === 'true';
   }
 
-  async unsetRequireInstallation(): Promise<Configuration> {
+  async unsetRequireInstallation(): Promise<ConfigurationEntity> {
     const configuration = await this.configurationRepository.findOne({
       section: 'global',
       name: 'requireInstallation',
@@ -30,7 +30,7 @@ export class ConfigurationService {
     return this.configurationRepository.save(configuration);
   }
 
-  async getConfigurations(): Promise<Configuration[]> {
+  async getConfigurations(): Promise<ConfigurationEntity[]> {
     return await this.configurationRepository.find();
   }
 }

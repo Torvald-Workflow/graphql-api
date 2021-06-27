@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ConfigurationService } from '../configuration/configuration.service';
 import { InstallationGuard } from '../configuration/guards/installation.guard';
@@ -28,5 +28,11 @@ export class UsersResolver {
     const user = await this.usersService.createDefaultAdminUser(data);
     await this.configurationService.unsetRequireInstallation();
     return user;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Query(() => [User])
+  async fetchAllUsers(): Promise<User[]> {
+    return await this.usersService.findAll();
   }
 }

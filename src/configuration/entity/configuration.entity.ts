@@ -1,8 +1,8 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
 import { SETTING_TYPE } from '../interfaces/settings.type';
 
-@Entity()
-export class Configuration {
+@Entity('configuration')
+export class ConfigurationEntity {
   @PrimaryColumn()
   section: string;
 

@@ -92,4 +92,44 @@ describe('UsersService', () => {
       isActive: true,
     });
   });
+
+  it('Should fetch all users stored in database (total: 2)', async () => {
+    const users = await service.findAll();
+
+    expect(users).toHaveLength(2);
+
+    expect(users[0]).toMatchObject({
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'test@test.fr',
+      birthday: null,
+      isAdmin: false,
+      isActive: true,
+      jobTitle: null,
+    });
+
+    expect(users[1]).toMatchObject({
+      firstName: 'Admin',
+      lastName: 'Admin',
+      email: 'admin@test.fr',
+      birthday: null,
+      isAdmin: true,
+      isActive: true,
+      jobTitle: null,
+    });
+  });
+
+  it('Should fetch admin user', async () => {
+    const user = await service.findOne('admin@test.fr');
+
+    expect(user).toMatchObject({
+      firstName: 'Admin',
+      lastName: 'Admin',
+      email: 'admin@test.fr',
+      birthday: null,
+      isAdmin: true,
+      isActive: true,
+      jobTitle: null,
+    });
+  });
 });
