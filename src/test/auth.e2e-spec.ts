@@ -38,4 +38,36 @@ describe('AuthResolver (e2e)', () => {
       expect(response.body.errors[0].message).toEqual('Unauthorized');
     });
   });
+
+  it('Should create a default admin user', async () => {
+    const createDefaultAdminUserRequest = `
+    mutation {
+      createDefaultAdminUser(user: {email: "ql2697@gmail.com", firstName: "Quentin", lastName: "LAURENT", password: "123aze+++"}) {
+        email
+      }
+    }`;
+
+    const response = await request(app.getHttpServer()).post('/graphql').send({
+      query: createDefaultAdminUserRequest,
+    });
+
+    expect(response.body.data.createDefaultAdminUser).toMatchObject({
+      email: 'ql2697@gmail.com',
+    });
+  });
+
+  it('Check that user now can login with admin account', async () => {
+    const loginRequest = `
+    mutation {
+      login(creditentials: { email: "ql2697@gmail.com", password: "123aze+++" }) {
+        token
+      }
+    }`;
+
+    const response = await request(app.getHttpServer()).post('/graphql').send({
+      query: loginRequest,
+    });
+
+    expect(response.body.data.login).toHaveProperty('token');
+  });
 });

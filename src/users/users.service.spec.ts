@@ -1,6 +1,8 @@
+import { JwtModule } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { getConnection } from 'typeorm';
+import { jwtConstants } from '../auth/constants';
 import { TypeOrmConfigService } from '../config.service';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UserEntity } from './user.entity';
@@ -19,6 +21,10 @@ describe('UsersService', () => {
           useClass: TypeOrmConfigService,
         }),
         TypeOrmModule.forFeature([UserEntity]),
+        JwtModule.register({
+          secret: jwtConstants.secret,
+          signOptions: { expiresIn: '60s' },
+        }),
       ],
     }).compile();
 

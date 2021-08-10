@@ -174,11 +174,9 @@ describe('UsersResolver', () => {
       }
     }`;
 
-    const response = await request(app.getHttpServer()).post('/graphql').send({
+    await request(app.getHttpServer()).post('/graphql').send({
       operationName: null,
       query: createDefaultAdminUserQuery,
     });
-
-    console.log(response);
   });
 });
