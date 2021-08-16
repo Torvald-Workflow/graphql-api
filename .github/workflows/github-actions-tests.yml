@@ -68,3 +68,6 @@ jobs:
           DATABASE_PASSWORD: workflow
           DATABASE_NAME: workflow
           JWT_SECRET: workflow_test
+
+      - name: Send code coverage to codacy
+        run: bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r coverage/clover.xml
