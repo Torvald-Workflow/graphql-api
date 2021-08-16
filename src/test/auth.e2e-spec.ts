@@ -40,9 +40,14 @@ describe('AuthResolver (e2e)', () => {
   });
 
   it('Should create a default admin user', async () => {
+    const email = 'ql2697@gmail.com';
+    const password = '123aze+++';
+    const firstName = 'Quentin';
+    const lastName = 'LAURENT';
+
     const createDefaultAdminUserRequest = `
     mutation {
-      createDefaultAdminUser(user: {email: "ql2697@gmail.com", firstName: "Quentin", lastName: "LAURENT", password: "123aze+++"}) {
+      createDefaultAdminUser(user: {email: "${email}", firstName: "${firstName}", lastName: "${lastName}", password: "${password}"}) {
         email
       }
     }`;
@@ -52,15 +57,26 @@ describe('AuthResolver (e2e)', () => {
     });
 
     expect(response.body.data.createDefaultAdminUser).toMatchObject({
-      email: 'ql2697@gmail.com',
+      email: email,
     });
   });
 
   it('Check that user now can login with admin account', async () => {
+    const email = 'ql2697@gmail.com';
+    const password = '123aze+++';
+    const firstName = 'Quentin';
+    const lastName = 'LAURENT';
+
     const loginRequest = `
     mutation {
-      login(creditentials: { email: "ql2697@gmail.com", password: "123aze+++" }) {
+      login(creditentials: { email: "${email}", password: "${password}" }) {
         token
+        user {
+          email
+          firstName
+          lastName
+          isAdmin
+        }
       }
     }`;
 
@@ -69,5 +85,12 @@ describe('AuthResolver (e2e)', () => {
     });
 
     expect(response.body.data.login).toHaveProperty('token');
+
+    expect(response.body.data.login.user).toMatchObject({
+      email,
+      firstName,
+      lastName,
+      isAdmin: true,
+    });
   });
 });
