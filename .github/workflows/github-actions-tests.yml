@@ -1,0 +1,70 @@
+name: Run jest tests
+on: [push]
+jobs:
+  Jest-tests:
+    runs-on: ubuntu-latest
+    container: node:14.16-alpine
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: workflow
+          POSTGRES_USER: workflow
+          POSTGRES_DB: workflow
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Chekout repository code
+        uses: actions/checkout@v2.1.0
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Launch tests
+        run: yarn test
+        env:
+          DATABASE_HOST: postgres
+          DATABASE_PORT: 5432
+          DATABASE_USER: workflow
+          DATABASE_PASSWORD: workflow
+          DATABASE_NAME: workflow
+          JWT_SECRET: workflow_test
+
+  Jest-coverage:
+    runs-on: ubuntu-latest
+    container: node:14.16-alpine
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: workflow
+          POSTGRES_USER: workflow
+          POSTGRES_DB: workflow
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Chekout repository code
+        uses: actions/checkout@v2.1.0
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Launch coverage tests
+        run: yarn test:cov
+        env:
+          DATABASE_HOST: postgres
+          DATABASE_PORT: 5432
+          DATABASE_USER: workflow
+          DATABASE_PASSWORD: workflow
+          DATABASE_NAME: workflow
+          JWT_SECRET: workflow_test

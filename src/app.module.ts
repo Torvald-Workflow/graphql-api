@@ -1,10 +1,26 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { GraphQLModule } from '@nestjs/graphql';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
+import { TypeOrmConfigService } from './config.service';
+import { ConfigurationModule } from './configuration/configuration.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    AuthModule,
+    ConfigurationModule,
+    UsersModule,
+    GraphQLModule.forRoot({
+      autoSchemaFile: 'schema.gql',
+      sortSchema: true,
+      context: ({ req }) => ({ req }),
+    }),
+    TypeOrmModule.forRootAsync({
+      name: 'default',
+      imports: [TypeOrmConfigService],
+      useClass: TypeOrmConfigService,
+    }),
+  ],
 })
 export class AppModule {}
