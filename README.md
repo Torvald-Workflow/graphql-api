@@ -45,3 +45,4 @@ Do a `yarn install` and let's get started!
 ### Last step
 
 You need to copy the `.env.example` to `.env` and fill with your informations (for devcontainers users, you may not need to edit the file as it is already configured).
+Then, you can check the `package.json` file to see which commands are available to run.
