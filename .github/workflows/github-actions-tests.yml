@@ -57,7 +57,7 @@ jobs:
         uses: actions/checkout@v2.1.0
 
       - name: Install dependencies
-        run: apk add bash && yarn
+        run: apk add --no-cache bash curl && yarn
 
       - name: Launch coverage tests
         run: yarn test:cov
