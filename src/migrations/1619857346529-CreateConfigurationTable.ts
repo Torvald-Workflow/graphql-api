@@ -1,7 +1,8 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class CreateConfigurationTable1619857346529
-  implements MigrationInterface {
+  implements MigrationInterface
+{
   name = 'CreateConfigurationTable1619857346529';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
