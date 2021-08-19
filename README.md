@@ -1,6 +1,7 @@
 # WORKFLOW API
 
-This repository is used to manage the development of the open-source "Workflow" application. The application aims to bring a new way of doing project management with various integrations available.
+This repository is used to manage the development of the open-source "Workflow" application.
+The application aims to bring a new way of doing project management with various integrations available.
 
 ## Development mode
 
@@ -38,6 +39,6 @@ Then, install postgresql [using Docker](https://hub.docker.com/_/postgres/) or i
 
 Do a `yarn install` and let's get started!
 
-### And then?
+### Last step
 
 You need to copy the `.env.example` to `.env` and fill with your informations (for devcontainers users, you may not need to edit the file as it is already configured).
