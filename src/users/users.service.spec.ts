@@ -4,7 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { getConnection } from 'typeorm';
 import { jwtConstants } from '../auth/constants';
 import { TypeOrmConfigService } from '../config.service';
-import { CreateUserDto } from './dto/createUser.dto';
+import { adminUser, adminUserDto, localUser, userDto } from '../test/helper';
 import { UserEntity } from './user.entity';
 import { UsersService } from './users.service';
 
@@ -51,49 +51,25 @@ describe('UsersService', () => {
   });
 
   it('Should create a user in database', async () => {
-    const email = 'test@test.fr';
-    const firstName = 'John';
-    const lastName = 'Doe';
-    const password = 'testpassword';
-
-    const createUserParameters: CreateUserDto = {
-      email,
-      firstName,
-      lastName,
-      password,
-    };
-
-    const user = await service.create(createUserParameters);
+    const user = await service.create(userDto());
 
     expect(user).toMatchObject({
-      email,
-      firstName,
-      lastName,
+      email: localUser.getEmail(),
+      firstName: localUser.getFirstName(),
+      lastName: localUser.getLastName(),
       isActive: true,
     });
   });
 
   it('Should create a default admin user in database', async () => {
-    const email = 'admin@test.fr';
-    const firstName = 'Admin';
-    const lastName = 'Admin';
-    const password = 'adminpassword';
-
-    const createUserParameters: CreateUserDto = {
-      email,
-      firstName,
-      lastName,
-      password,
-    };
-
     const user: UserEntity = await service.createDefaultAdminUser(
-      createUserParameters,
+      adminUserDto(),
     );
 
     expect(user).toMatchObject({
-      email,
-      firstName,
-      lastName,
+      email: adminUser.getEmail(),
+      firstName: adminUser.getFirstName(),
+      lastName: adminUser.getLastName(),
       isAdmin: true,
       isActive: true,
     });
@@ -105,9 +81,9 @@ describe('UsersService', () => {
     expect(users).toHaveLength(2);
 
     expect(users[0]).toMatchObject({
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'test@test.fr',
+      firstName: localUser.getFirstName(),
+      lastName: localUser.getLastName(),
+      email: localUser.getEmail(),
       birthday: null,
       isAdmin: false,
       isActive: true,
@@ -115,9 +91,9 @@ describe('UsersService', () => {
     });
 
     expect(users[1]).toMatchObject({
-      firstName: 'Admin',
-      lastName: 'Admin',
-      email: 'admin@test.fr',
+      firstName: adminUser.getFirstName(),
+      lastName: adminUser.getLastName(),
+      email: adminUser.getEmail(),
       birthday: null,
       isAdmin: true,
       isActive: true,
@@ -126,12 +102,12 @@ describe('UsersService', () => {
   });
 
   it('Should fetch admin user', async () => {
-    const user = await service.findOne('admin@test.fr');
+    const user = await service.findOne(adminUser.getEmail());
 
     expect(user).toMatchObject({
-      firstName: 'Admin',
-      lastName: 'Admin',
-      email: 'admin@test.fr',
+      firstName: adminUser.getFirstName(),
+      lastName: adminUser.getLastName(),
+      email: adminUser.getEmail(),
       birthday: null,
       isAdmin: true,
       isActive: true,

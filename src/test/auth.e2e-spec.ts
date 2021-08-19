@@ -3,6 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 import { getConnection } from 'typeorm';
 import { AppModule } from '../app.module';
+import { adminUser } from './helper';
 
 describe('AuthResolver (e2e)', () => {
   let app: INestApplication;
@@ -22,7 +23,7 @@ describe('AuthResolver (e2e)', () => {
   it('Check that user cannot login without account', async () => {
     const loginRequest = `
     mutation {
-      login(creditentials: {email: "ql2697@gmail.com", password: "123aze+++"}) {
+      login(creditentials: {email: "${adminUser.getEmail()}", password: "${adminUser.getPassword()}"}) {
         user {
           id
         }
@@ -40,14 +41,9 @@ describe('AuthResolver (e2e)', () => {
   });
 
   it('Should create a default admin user', async () => {
-    const email = 'ql2697@gmail.com';
-    const password = '123aze+++';
-    const firstName = 'Quentin';
-    const lastName = 'LAURENT';
-
     const createDefaultAdminUserRequest = `
     mutation {
-      createDefaultAdminUser(user: {email: "${email}", firstName: "${firstName}", lastName: "${lastName}", password: "${password}"}) {
+      createDefaultAdminUser(user: {email: "${adminUser.getEmail()}", firstName: "${adminUser.getFirstName()}", lastName: "${adminUser.getLastName()}", password: "${adminUser.getPassword()}"}) {
         email
       }
     }`;
@@ -57,19 +53,14 @@ describe('AuthResolver (e2e)', () => {
     });
 
     expect(response.body.data.createDefaultAdminUser).toMatchObject({
-      email: email,
+      email: adminUser.getEmail(),
     });
   });
 
   it('Check that user now can login with admin account', async () => {
-    const email = 'ql2697@gmail.com';
-    const password = '123aze+++';
-    const firstName = 'Quentin';
-    const lastName = 'LAURENT';
-
     const loginRequest = `
     mutation {
-      login(creditentials: { email: "${email}", password: "${password}" }) {
+      login(creditentials: { email: "${adminUser.getEmail()}", password: "${adminUser.getPassword()}" }) {
         token
         user {
           email
@@ -87,9 +78,9 @@ describe('AuthResolver (e2e)', () => {
     expect(response.body.data.login).toHaveProperty('token');
 
     expect(response.body.data.login.user).toMatchObject({
-      email,
-      firstName,
-      lastName,
+      email: adminUser.getEmail(),
+      firstName: adminUser.getFirstName(),
+      lastName: adminUser.getLastName(),
       isAdmin: true,
     });
   });

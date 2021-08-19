@@ -4,7 +4,7 @@ import * as request from 'supertest';
 import { getConnection } from 'typeorm';
 import { TypeOrmConfigService } from '../config.service';
 import { ConfigurationModule } from '../configuration/configuration.module';
-import { CreateUserDto } from './dto/createUser.dto';
+import { adminUser, adminUserDto, localUser, userDto } from '../test/helper';
 import { UserEntity } from './user.entity';
 import { User } from './user.model';
 import { UsersResolver } from './users.resolver';
@@ -42,26 +42,12 @@ describe('UsersResolver', () => {
   });
 
   it('Should create admin user', async () => {
-    const email = 'admin@test.fr';
-    const firstName = 'Admin';
-    const lastName = 'Admin';
-    const password = 'adminpassword';
-
-    const createUserParameters: CreateUserDto = {
-      firstName,
-      lastName,
-      email,
-      password,
-    };
-
-    const user: User = await resolver.createDefaultAdminUser(
-      createUserParameters,
-    );
+    const user: User = await resolver.createDefaultAdminUser(adminUserDto());
 
     expect(user).toMatchObject({
-      firstName,
-      lastName,
-      email,
+      firstName: adminUser.getFirstName(),
+      lastName: adminUser.getLastName(),
+      email: adminUser.getEmail(),
       birthday: null,
       isAdmin: true,
       isActive: true,
@@ -70,20 +56,8 @@ describe('UsersResolver', () => {
   });
 
   it('Should not create the same admin user', async () => {
-    const email = 'admin@test.fr';
-    const firstName = 'Admin';
-    const lastName = 'Admin';
-    const password = 'adminpassword';
-
-    const createUserParameters: CreateUserDto = {
-      firstName,
-      lastName,
-      email,
-      password,
-    };
-
     try {
-      await resolver.createUser(createUserParameters);
+      await resolver.createUser(adminUserDto());
       expect(true).toBe(false);
     } catch (e) {
       expect(e.response.error).toBe('Bad Request');
@@ -91,24 +65,12 @@ describe('UsersResolver', () => {
   });
 
   it('Should create user', async () => {
-    const email = 'test@test.fr';
-    const firstName = 'Admin';
-    const lastName = 'Admin';
-    const password = 'adminpassword';
-
-    const createUserParameters: CreateUserDto = {
-      firstName,
-      lastName,
-      email,
-      password,
-    };
-
-    const user: User = await resolver.createUser(createUserParameters);
+    const user: User = await resolver.createUser(userDto());
 
     expect(user).toMatchObject({
-      firstName,
-      lastName,
-      email,
+      firstName: localUser.getFirstName(),
+      lastName: localUser.getLastName(),
+      email: localUser.getEmail(),
       birthday: null,
       isAdmin: false,
       isActive: true,
@@ -117,20 +79,8 @@ describe('UsersResolver', () => {
   });
 
   it('Should not create the same user', async () => {
-    const email = 'admin@test.fr';
-    const firstName = 'Admin';
-    const lastName = 'Admin';
-    const password = 'adminpassword';
-
-    const createUserParameters: CreateUserDto = {
-      firstName,
-      lastName,
-      email,
-      password,
-    };
-
     try {
-      await resolver.createUser(createUserParameters);
+      await resolver.createUser(adminUserDto());
       expect(true).toBe(false);
     } catch (e) {
       expect(e.response.error).toBe('Bad Request');
@@ -143,9 +93,9 @@ describe('UsersResolver', () => {
     expect(users).toHaveLength(2);
 
     expect(users[0]).toMatchObject({
-      firstName: 'Admin',
-      lastName: 'Admin',
-      email: 'admin@test.fr',
+      firstName: adminUser.getFirstName(),
+      lastName: adminUser.getLastName(),
+      email: adminUser.getEmail(),
       birthday: null,
       isAdmin: true,
       isActive: true,
@@ -153,9 +103,9 @@ describe('UsersResolver', () => {
     });
 
     expect(users[1]).toMatchObject({
-      firstName: 'Admin',
-      lastName: 'Admin',
-      email: 'test@test.fr',
+      firstName: localUser.getFirstName(),
+      lastName: localUser.getLastName(),
+      email: localUser.getEmail(),
       birthday: null,
       isAdmin: false,
       isActive: true,
