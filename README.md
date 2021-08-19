@@ -1,3 +1,6 @@
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/9da19ea5000143919547027d2f76d34a)](https://www.codacy.com/gh/Torvald-Workflow/graphql-api/dashboard?utm_source=github.com&utm_medium=referral&utm_content=Torvald-Workflow/graphql-api&utm_campaign=Badge_Grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/9da19ea5000143919547027d2f76d34a)](https://www.codacy.com/gh/Torvald-Workflow/graphql-api/dashboard?utm_source=github.com&utm_medium=referral&utm_content=Torvald-Workflow/graphql-api&utm_campaign=Badge_Coverage)
+
 # WORKFLOW API
 
 This repository is used to manage the development of the open-source "Workflow" application.
