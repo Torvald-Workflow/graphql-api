@@ -30,25 +30,22 @@ export class UsersService {
         'A user with this email is already registered',
       );
 
-    const user = new UserEntity();
-
-    user.email = data.email;
-    user.firstName = data.firstName;
-    user.lastName = data.lastName;
-    user.password = await bcrypt.hash(data.password, BCRYPT_SALT);
-    user.createdAt = new Date();
-
-    return this.usersRepository.save(user);
+    return this.createUser(data);
   }
 
   async createDefaultAdminUser(data: CreateUserDto): Promise<UserEntity> {
+    return this.createUser(data, true);
+  }
+
+  // Create a user in database
+  async createUser(data: CreateUserDto, isAdmin = false): Promise<UserEntity> {
     const user = new UserEntity();
 
     user.email = data.email;
     user.firstName = data.firstName;
     user.lastName = data.lastName;
     user.password = await bcrypt.hash(data.password, BCRYPT_SALT);
-    user.isAdmin = true;
+    user.isAdmin = isAdmin;
     user.createdAt = new Date();
 
     return this.usersRepository.save(user);
