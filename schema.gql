@@ -14,6 +14,12 @@ type Configuration {
   value: String!
 }
 
+input CreateProjectDto {
+  description: String!
+  name: String!
+  slug: String!
+}
+
 input CreateUserDto {
   email: String!
   firstName: String!
@@ -33,13 +39,27 @@ scalar DateTime
 
 type Mutation {
   createDefaultAdminUser(user: CreateUserDto!): User!
+  createProject(data: CreateProjectDto!): Project!
   createUser(user: CreateUserDto!): User!
   login(creditentials: CreditentialInput!): AuthenticatedUser!
 }
 
+type Project {
+  createdAt: DateTime!
+  description: String!
+  id: String!
+  name: String!
+  slug: String!
+  updatedAt: DateTime!
+  users: [User!]!
+}
+
 type Query {
+  fetchAllProjects: [Project!]!
   fetchAllUsers: [User!]!
   fetchConfigurations: [Configuration!]!
+  fetchProjectById(id: String!): Project!
+  fetchProjectBySlug(slug: String!): Project!
 }
 
 type User {

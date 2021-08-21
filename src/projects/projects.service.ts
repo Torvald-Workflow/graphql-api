@@ -4,6 +4,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CurrentUserDecoratorInterface } from 'src/auth/decorator/currentUser';
+import { UserEntity } from 'src/users/user.entity';
 import { Repository } from 'typeorm';
 import { CreateProjectDto } from './dto/createProject.dto';
 import { UpdateProjectDto } from './dto/updateProject.dto';
@@ -15,6 +17,8 @@ export class ProjectsService {
   constructor(
     @InjectRepository(ProjectEntity)
     private projectRepository: Repository<ProjectEntity>,
+    @InjectRepository(UserEntity)
+    private userRepository: Repository<UserEntity>,
   ) {}
 
   async findAll(): Promise<ProjectEntity[]> {
@@ -29,7 +33,10 @@ export class ProjectsService {
     return this.projectRepository.findOne({ slug });
   }
 
-  async create(data: CreateProjectDto): Promise<ProjectEntity> {
+  async create(
+    user: CurrentUserDecoratorInterface,
+    data: CreateProjectDto,
+  ): Promise<ProjectEntity> {
     const isProjectExist =
       (await this.findOneBySlug(data.slug)) ||
       (await this.projectRepository.findOne({ name: data.name }));
@@ -37,13 +44,15 @@ export class ProjectsService {
     if (isProjectExist)
       throw new BadRequestException('A project already exists using this slug');
 
+    const userCreator = await this.userRepository.findOne({ id: user.userId });
+
     const newProject = new ProjectEntity();
 
     newProject.name = data.name;
     newProject.slug = data.slug;
     newProject.description = data.description;
     newProject.createdAt = new Date();
-    newProject.users = [];
+    newProject.users = [userCreator];
 
     return this.projectRepository.save(newProject);
   }
@@ -90,7 +99,17 @@ export class ProjectsService {
     if (!projectToEdit)
       throw new NotFoundException('This project does not exists');
 
-    projectToEdit.users = data.users;
+    const userArray: UserEntity[] = [];
+
+    for (const userId in data.users) {
+      const currentUser = await this.userRepository.findOne({
+        id: userId,
+      });
+
+      userArray.push(currentUser);
+    }
+
+    projectToEdit.users = userArray;
 
     return this.projectRepository.save(projectToEdit);
   }

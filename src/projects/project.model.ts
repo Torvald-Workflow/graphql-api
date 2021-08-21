@@ -21,6 +21,6 @@ export class Project {
   @Field()
   updatedAt: Date;
 
-  @Field()
+  @Field(() => [User])
   users: User[];
 }
